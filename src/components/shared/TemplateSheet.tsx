@@ -1,4 +1,5 @@
 import { ImageIcon, Layout, PanelsLeftBottom } from "lucide-react";
+import { withBasePath } from "@/lib/image";
 import { motion } from "framer-motion";
 import { useTranslations, useLocale } from "@/i18n/compat/client";
 import {
@@ -43,7 +44,7 @@ const TemplatePreview = ({
       <div className="relative aspect-[210/297] w-full overflow-hidden bg-gray-50 dark:bg-gray-900">
         {snapshotSrc ? (
           <img
-            src={snapshotSrc}
+            src={withBasePath(snapshotSrc)}
             alt={template.name}
             className="h-full w-full object-cover object-top"
             loading="eager"

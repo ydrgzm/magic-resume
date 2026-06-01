@@ -5,6 +5,7 @@ import {
   getTemplateSnapshotSrc,
   isTemplatePreviewLocale,
 } from "@/lib/templatePreview";
+import { withBasePath } from "@/lib/image";
 
 export const useTemplateSnapshots = (locale: string | null | undefined) => {
   const resolvedLocale = isTemplatePreviewLocale(locale) ? locale : "zh";
@@ -30,7 +31,7 @@ export const useTemplateSnapshots = (locale: string | null | undefined) => {
       .map((src) => {
         const image = new window.Image();
         image.decoding = "async";
-        image.src = src;
+        image.src = withBasePath(src);
         return image;
       });
 

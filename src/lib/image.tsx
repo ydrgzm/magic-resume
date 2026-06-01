@@ -1,5 +1,11 @@
 import { CSSProperties, forwardRef, ImgHTMLAttributes } from "react";
 
+export function withBasePath(src: string): string {
+  if (!src.startsWith("/") || src.startsWith("//")) return src;
+  const base = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "");
+  return base + src;
+}
+
 type ImageLikeSource = string | { src: string };
 
 type Props = Omit<ImgHTMLAttributes<HTMLImageElement>, "src"> & {
@@ -12,7 +18,7 @@ const Image = forwardRef<HTMLImageElement, Props>(function Image(
   { src, alt, fill, style, priority, ...rest },
   ref
 ) {
-  const resolvedSrc = typeof src === "string" ? src : src.src;
+  const resolvedSrc = withBasePath(typeof src === "string" ? src : src.src);
   const mergedStyle: CSSProperties = fill
     ? {
         position: "absolute",
