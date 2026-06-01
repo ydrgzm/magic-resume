@@ -20,10 +20,7 @@ export default defineConfig({
       srcDirectory: "src",
       router: {
         routesDirectory: "routes"
-      },
-      ...(process.env.BUILD_PRESET
-        ? { server: { preset: process.env.BUILD_PRESET } }
-        : {})
+      }
     }),
     viteReact()
   ]

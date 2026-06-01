@@ -38,19 +38,30 @@ jobs:
       - name: Build static site
         run: pnpm run build
         env:
+          NITRO_PRESET: static
           VITE_BASE_URL: /magic-resume/
-          BUILD_PRESET: static
 
-      - name: Add .nojekyll
-        run: touch .output/public/.nojekyll
+      - name: Locate output directory
+        id: outdir
+        run: |
+          if [ -d ".output/public" ]; then
+            echo "dir=.output/public" >> $GITHUB_OUTPUT
+          elif [ -d "dist/client" ]; then
+            echo "dir=dist/client" >> $GITHUB_OUTPUT
+          else
+            echo "Available dirs:" && ls -la
+            exit 1
+          fi
 
-      - name: SPA 404 fallback
-        run: cp .output/public/index.html .output/public/404.html
+      - name: Add .nojekyll and SPA 404 fallback
+        run: |
+          touch ${{ steps.outdir.outputs.dir }}/.nojekyll
+          cp ${{ steps.outdir.outputs.dir }}/index.html ${{ steps.outdir.outputs.dir }}/404.html
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .output/public
+          path: ${{ steps.outdir.outputs.dir }}
 
   deploy:
     needs: build
