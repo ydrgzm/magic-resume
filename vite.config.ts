@@ -4,6 +4,7 @@ import viteReact from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
+  base: process.env.VITE_BASE_URL ?? "/",
   server: {
     port: 3000
   },
@@ -19,7 +20,10 @@ export default defineConfig({
       srcDirectory: "src",
       router: {
         routesDirectory: "routes"
-      }
+      },
+      ...(process.env.BUILD_PRESET
+        ? { server: { preset: process.env.BUILD_PRESET } }
+        : {})
     }),
     viteReact()
   ]
