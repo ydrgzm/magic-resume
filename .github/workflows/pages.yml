@@ -41,17 +41,37 @@ jobs:
           NITRO_PRESET: static
           VITE_BASE_URL: /magic-resume/
 
-      - name: Locate output directory
+      - name: Inspect build output
+        run: |
+          echo "=== root ===" && ls -la
+          echo "=== dist/ ===" && find dist -maxdepth 3 2>/dev/null | head -60 || echo "(no dist/)"
+          echo "=== .output/ ===" && find .output -maxdepth 3 2>/dev/null | head -60 || echo "(no .output/)"
+
+      - name: Locate or create index.html
         id: outdir
         run: |
-          if [ -d ".output/public" ]; then
+          # Best case: Nitro static preset created .output/public with index.html
+          if [ -f ".output/public/index.html" ]; then
             echo "dir=.output/public" >> $GITHUB_OUTPUT
-          elif [ -d "dist/client" ]; then
-            echo "dir=dist/client" >> $GITHUB_OUTPUT
-          else
-            echo "Available dirs:" && ls -la
-            exit 1
+            exit 0
           fi
+
+          # Fallback: pre-render by running the built server briefly
+          echo "No static index.html found — pre-rendering via built server"
+          node server.mjs &
+          SERVER_PID=$!
+          # Wait for the server to be ready
+          for i in $(seq 1 15); do
+            curl -sf http://localhost:3000/ > /dev/null && break
+            sleep 1
+          done
+          mkdir -p _site
+          # Copy all client assets
+          cp -r dist/client/. _site/
+          # Capture server-rendered HTML for the root route
+          curl -sf http://localhost:3000/ -o _site/index.html
+          kill $SERVER_PID || true
+          echo "dir=_site" >> $GITHUB_OUTPUT
 
       - name: Add .nojekyll and SPA 404 fallback
         run: |
