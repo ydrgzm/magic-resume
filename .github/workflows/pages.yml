@@ -62,14 +62,17 @@ jobs:
           SERVER_PID=$!
           # Wait for the server to be ready
           for i in $(seq 1 15); do
-            curl -sf http://localhost:3000/ > /dev/null && break
+            curl -sf "http://localhost:3000/magic-resume/" > /dev/null && break
             sleep 1
           done
           mkdir -p _site
           # Copy all client assets
           cp -r dist/client/. _site/
-          # Capture server-rendered HTML for the root route
-          curl -sf http://localhost:3000/ -o _site/index.html
+          # Capture server-rendered HTML at the basepath route (not /)
+          # The router basepath is /magic-resume/ so we must request that path
+          curl -sL "http://localhost:3000/magic-resume/" -o _site/index.html
+          echo "--- first 20 lines of captured index.html ---"
+          head -20 _site/index.html
           kill $SERVER_PID || true
           echo "dir=_site" >> $GITHUB_OUTPUT
 
