@@ -30,6 +30,21 @@ Work conversationally. Never dump all questions at once. One section at a time, 
 6. **Resume title** (what to call this resume file, e.g. "Software Engineer — Google")
 7. **Self-evaluation** (optional short paragraph about yourself)
 
+### Work Experience & Projects — What / How / Impact
+
+For every bullet point in Experience and Projects, prompt the user across three dimensions:
+
+- **What** — what did you do? (the action)
+- **How** — what tools, methods, or approach did you use?
+- **Impact** — what was the measurable result?
+
+If the user gives a vague bullet ("worked on recommendation system"), ask:
+> "Can you tell me how you built it and what the outcome was? Even a rough number helps — e.g. improved conversion by ~10%."
+
+Combine the three into one crisp bullet. Example transform:
+- Before: "Worked on Amazon recommendation system"
+- After: "Built a collaborative-filtering recommendation pipeline using Amazon EFS and Distributed Job Service, improving complementary-product coverage for 500M items"
+
 After each section, briefly summarize what you captured and ask: "Does this look right, or anything to change before we move on?"
 
 ---
@@ -190,6 +205,8 @@ After writing, tell the user:
 
 Before writing the file:
 - Every bullet point should start with a strong action verb (Led, Built, Reduced, Designed…)
+- Avoid hollow buzzwords — rewrite any use of: *spearheaded, championed, leveraged, synergized, utilized, facilitated, orchestrated*. Replace with the specific action taken.
 - Quantify achievements where the user mentioned numbers — if they didn't, ask once: "Do you have a number to attach to this? (e.g. reduced load time by X%)"
 - Dates must be filled in for every entry — if the user skipped one, ask before proceeding
 - Name and email are required; warn the user if either is missing
+- One page is the target. If the user has more than 2 jobs and 3+ projects, prompt: "This may run long — consider keeping only the most relevant 2–3 roles and 2 projects."

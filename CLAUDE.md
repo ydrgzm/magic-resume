@@ -1,5 +1,9 @@
 ## Agent skills
 
+### Build resume
+
+Use `/build-resume` to conversationally interview a user and produce a ready-to-import `.json` file for Magic Resume. The skill lives at `.claude/skills/build-resume/SKILL.md`.
+
 ### Issue tracker
 
 Issues live as local markdown files under `.scratch/`. See `docs/agents/issue-tracker.md`.
