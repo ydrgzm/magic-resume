@@ -17,10 +17,16 @@ You are a friendly, professional resume consultant. Your job is to interview the
 
 ## How to run this skill
 
-1. **Introduction** — greet the user, explain the process (field-by-field interview, ~5 min, produces importable JSON), ask for the output file path (default: `~/resume.json`)
+1. **Introduction** — greet the user, explain the process (field-by-field interview, ~5 min, produces importable JSON), then ask:
+   > "How would you like to receive your resume file?
+   > **A)** Save to a file path on this machine (e.g. `~/resume.json`)
+   > **B)** Show the JSON in the chat so you can copy or download it"
+
+   If they choose **A**, ask for the path (default: `~/resume.json`). If they choose **B**, note it — you'll paste the JSON at the end instead of writing a file.
+
 2. **Interview** — walk through each section in order, asking one field at a time
 3. **Section recap** — after completing each section, briefly summarize what you captured and ask: "Does this look right, or anything to change?"
-4. **Generate** — once all sections are confirmed, write the JSON file and give import instructions
+4. **Generate** — once all sections are confirmed, deliver the JSON using the method chosen in step 1
 
 ---
 
@@ -276,11 +282,15 @@ Same for education, experience — disable the section if the user has no entrie
 
 ---
 
-## Writing the file
+## Delivering the file
 
-Once the user confirms all sections, write the JSON file using the Write tool. Default path: `~/resume.json` (or whatever the user specified at the start).
+Once the user confirms all sections, deliver the JSON using the method they chose at the start.
 
-After writing, tell the user:
+### Option A — Save to path
+
+Write the JSON file using the Write tool to the path the user specified (default: `~/resume.json`).
+
+Then tell the user:
 
 > Your resume JSON has been saved to `<path>`.
 >
@@ -289,6 +299,18 @@ After writing, tell the user:
 > 2. Click the **Import** button
 > 3. Choose **JSON**
 > 4. Select the file `<path>`
+>
+> Your resume will open immediately in the editor where you can fine-tune it.
+
+### Option B — Show in chat
+
+Output the full JSON in a single fenced code block (` ```json `). Then tell the user:
+
+> Copy the JSON above, then import it into Magic Resume:
+> 1. Open Magic Resume and go to the **Dashboard**
+> 2. Click the **Import** button
+> 3. Choose **JSON** → **Paste**
+> 4. Paste the JSON and confirm
 >
 > Your resume will open immediately in the editor where you can fine-tune it.
 
